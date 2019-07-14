@@ -1,0 +1,20 @@
+[mysqld]
+server-id = 1
+log-bin = mysql-bin
+log-slave-updates = 1
+datadir = /var/lib/mysql
+
+innodb_flush_log_at_trx_commit = 1
+innodb_flush_method = O_DIRECT
+innodb_buffer_pool_size = 2G
+innodb_log_file_size = 128M
+
+auto_increment_increment = 2
+auto_increment_offset = 1
+
+skip-host-cache
+skip-name-resolve
+
+#write set
+loose-binlog_transaction_dependency_tracking = WRITESET
+loose-transaction_write_set_extraction = XXHASH64

@@ -1,0 +1,18 @@
+version: '2'
+services:
+
+  database_master:
+    image: mysql:5.7
+    container_name: database_master
+    volumes:
+      - ./docker/database/dumps/master:/dumps:rw,cached
+      - ./docker/database/data/mysql-master:/var/lib/mysql:rw,cached
+      - ./docker/database/config/mysql-master:/etc/mysql/conf.d:rw,cached
+      - ./docker/database/log/mysql-master:/var/log/mysql:rw,cached
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_MASTER_ROOT_PASSWORD}
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    restart: always
