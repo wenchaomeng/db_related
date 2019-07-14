@@ -1,0 +1,6 @@
+tmp
+.swp
+*.log
+**/mysql/**/33*
+*.rdb
+.git

@@ -13,8 +13,6 @@ PORT=`getPort $FULL_DIR`
 makedir $DATA
 makedir $LOG
 
-backlog $LOG
-
 if [ -f $DIR/slave.conf ]
 then
 	CONFIG=$DIR/slave.conf
@@ -35,7 +33,6 @@ for pid in `ps -ef | grep 'redis-serve[r]' | grep "$PORT" | awk '{print $2}'`; d
 done
 
 sleep 1
-
 
 DATA_DIR=$FULL_DIR"/data"
 sed -i  "s#dir.*#dir $DATA_DIR#"   $DIR/*.conf
