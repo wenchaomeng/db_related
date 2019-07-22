@@ -71,8 +71,8 @@ echo all process list:
 ps -ef | egrep "mysql[d].*$PORT" 
 
 if [ $ROOT_PASS != "root" ];then
-	echo change password to root
-	mysql --connect-expired-password  --host localhost -P$PORT -uroot -p''$ROOT_PASS'' << EOF
+	echo --------change password to root
+	mysql --socket mysql.sock --connect-expired-password  --host localhost -P$PORT -uroot -p''$ROOT_PASS'' << EOF
 	SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
 	GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'root';
  	FLUSH PRIVILEGES;

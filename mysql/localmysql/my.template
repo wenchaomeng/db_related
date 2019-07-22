@@ -1,5 +1,6 @@
 [mysqld]
 server-id = 100
+socket=BASE/mysql.sock
 log-bin = mysql-bin
 log-slave-updates = 1
 
