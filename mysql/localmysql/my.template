@@ -20,12 +20,28 @@ skip-name-resolve
 
 #write set
 slave-parallel-type = LOGICAL_CLOCK
+transaction_write_set_extraction=XXHASH64
+binlog_transaction_dependency_tracking=WRITESET
 slave-parallel-workers = 32
+
+#gtid
+gtid_mode=on
+enforce-gtid-consistency=on
 
 general_log_file=BASE/mysql.log
 general_log=1
 
 
 #debug
-debug=d,info,error,query:o,BASE/mysqld.trace
+#debug=d,info,error,query:o,BASE/mysqld.trace
+debug=d:t:i:o,BASE/mysqld.trace
 
+#dead lock
+innodb_print_all_deadlocks=ON
+
+skip_ssl
+
+# slow log
+slow_query_log = 1
+slow_query_log_file=BASE/log/mysql-slow.log
+long_query_time = 2
