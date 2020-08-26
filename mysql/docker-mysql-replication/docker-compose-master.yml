@@ -2,7 +2,7 @@ version: '2'
 services:
 
   database_master:
-    image: mysql:5.7
+    image: mysql:5.7.19
     container_name: database_master
     volumes:
       - ./docker/database/dumps/master:/dumps:rw,cached

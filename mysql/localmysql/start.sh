@@ -28,17 +28,26 @@ function getPortFromPathOrDefault(){
 
 
 #VARS
+
+MYSQL_PATH=`which mysql | xargs dirname | xargs dirname`
 BASE=`getCurrentRealPath`
 PORT=`getPortFromPathOrDefault $BASE 3308`
 ROOT_PASS=root
+TEMPLATE=$1
 CONFIG=my.cnf
-echo "base dir:$BASE, port: $PORT"
+
+if [ -z $TEMPLATE ];then
+	TEMPLATE=my.template
+fi
+
+echo "base dir:$BASE, port: $PORT, template: $TEMPLATE, mysql_path: $MYSQL_PATH"
 
 cd $BASE
 if ! [ -d data ];then
 	echo not exist, create and initialize
 	mkdir data
 	mkdir basedir
+	mkdir log
 	mysqld --initialize --basedir=$BASE/basedir --datadir=$BASE/data > init.log 2>&1
 	ROOT_PASS=`egrep -m 1 "temporary password"  init.log | awk '{print $NF}'`
 	echo root password $ROOT_PASS
@@ -48,11 +57,12 @@ fi
 
 if [ -f $CONFIG ]; then
 	echo my.cnf already exist
-elif [ -f my.template ];then
-	echo my.template exist
-	sed 's#BASE#'$BASE'#g'  my.template > $CONFIG
+elif [ -f $TEMPLATE ];then
+	echo $TEMPLATE exist
+	sed 's#BASE#'$BASE'#g'  $TEMPLATE > $CONFIG
+	sed -i 's#MYSQL_DIR#'$MYSQL_PATH'#g' $CONFIG 
 else
-	echo no my.cnf or my.template exist, exit
+	echo no my.cnf or $TEMPLATE exist, exit
 	exit
 fi
 
@@ -75,6 +85,7 @@ if [ $ROOT_PASS != "root" ];then
 	mysql --socket mysql.sock --connect-expired-password  --host localhost -P$PORT -uroot -p''$ROOT_PASS'' << EOF
 	SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
 	GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'root';
+	grant grant option on *.* to root@'%';
  	FLUSH PRIVILEGES;
 EOF
 fi

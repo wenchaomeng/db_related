@@ -18,6 +18,9 @@ auto_increment_offset = 2
 skip-host-cache
 skip-name-resolve
 
+master_info_repository=TABLE
+relay_log_info_repository=TABLE
+
 #write set
 slave-parallel-type = LOGICAL_CLOCK
 transaction_write_set_extraction=XXHASH64
@@ -40,7 +43,12 @@ debug=d:t:i:o,BASE/mysqld.trace
 innodb_print_all_deadlocks=ON
 
 #binlog
+log_bin=binlog
+binlog_format=ROW
 binlog_rows_query_log_events=ON
+binlog_checksum=NONE
+
+log_slave_updates=ON
 
 skip_ssl
 
@@ -48,3 +56,14 @@ skip_ssl
 slow_query_log = 1
 slow_query_log_file=BASE/log/mysql-slow.log
 long_query_time = 2
+
+#mgr
+disabled_storage_engines="MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
+plugin_dir=MYSQL_DIR/lib/plugin
+plugin_load_add='group_replication.so'
+group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+group_replication_start_on_boot=off
+group_replication_local_address= "127.0.0.1:4306"
+group_replication_group_seeds= "127.0.0.1:4306,127.0.0.1:4307,127.0.0.1:4308"
+group_replication_bootstrap_group=off
+
