@@ -26,9 +26,27 @@ function getPortFromPathOrDefault(){
     echo $result
 }
 
+function waitUntilDead(){
+	port=$1
+	while  ps -ef | egrep "mysql[d].*$port"; do
+		echo "process still alive"
+		sleep 1
+	done
+	echo ====process dead abort
+}
 
+function waitUntilAlive(){
+	port=$1
+    while ! ps -ef | egrep "mysql[d].*$port"; do
+        echo "process dead, wait for $port to be alive"
+        sleep 1
+    done
+	echo ====process alive abort
+}
 #VARS
 
+
+USER_SQL_LOGBIN=0
 MYSQL_PATH=`which mysql | xargs dirname | xargs dirname`
 BASE=`getCurrentRealPath`
 PORT=`getPortFromPathOrDefault $BASE 3308`
@@ -73,19 +91,21 @@ do
 	sleep 1
 done
 
-echo sleeping 2 seconds
-sleep 2
+waitUntilDead $PORT
 mysqld --defaults-file="$BASE/$CONFIG" --port=$PORT > $BASE/startup.log 2>&1 &
 sleep 3
+waitUntilAlive $PORT
 echo all process list:
 ps -ef | egrep "mysql[d].*$PORT" 
 
 if [ $ROOT_PASS != "root" ];then
 	echo --------change password to root
 	mysql --socket mysql.sock --connect-expired-password  --host localhost -P$PORT -uroot -p''$ROOT_PASS'' << EOF
+	SET SQL_LOG_BIN=$(( $USER_SQL_LOGBIN ));
 	SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
 	GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'root';
 	grant grant option on *.* to root@'%';
  	FLUSH PRIVILEGES;
+	SET SQL_LOG_BIN=$(( 1-$USER_SQL_LOGBIN ));
 EOF
 fi

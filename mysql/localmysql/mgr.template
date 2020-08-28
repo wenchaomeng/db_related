@@ -63,7 +63,8 @@ plugin_dir=MYSQL_DIR/lib/plugin
 plugin_load_add='group_replication.so'
 group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 group_replication_start_on_boot=off
-group_replication_local_address= "127.0.0.1:4306"
-group_replication_group_seeds= "127.0.0.1:4306,127.0.0.1:4307,127.0.0.1:4308"
+group_replication_local_address="127.0.0.1:43061"
+group_replication_group_seeds="127.0.0.1:43061,127.0.0.1:43071,127.0.0.1:43081"
 group_replication_bootstrap_group=off
-
+slave_preserve_commit_order=ON
+group_replication_allow_local_disjoint_gtids_join=ON

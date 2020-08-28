@@ -4,3 +4,4 @@ tmp
 **/mysql/**/33*
 *.rdb
 .git
+*.bak
