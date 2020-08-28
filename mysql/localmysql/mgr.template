@@ -59,6 +59,7 @@ long_query_time = 2
 
 #mgr
 disabled_storage_engines="MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
+group_replication_single_primary_mode=OFF
 plugin_dir=MYSQL_DIR/lib/plugin
 plugin_load_add='group_replication.so'
 group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
