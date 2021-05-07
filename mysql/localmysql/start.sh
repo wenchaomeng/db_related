@@ -28,6 +28,7 @@ function getPortFromPathOrDefault(){
 
 function waitUntilDead(){
 	port=$1
+	echo ===========waitUntilDead:$port
 	while  ps -ef | egrep "mysql[d].*$port"; do
 		echo "process still alive"
 		sleep 1
@@ -37,6 +38,7 @@ function waitUntilDead(){
 
 function waitUntilAlive(){
 	port=$1
+	echo ===========waitUntilAlive:$port
     while ! ps -ef | egrep "mysql[d].*$port"; do
         echo "process dead, wait for $port to be alive"
         sleep 1

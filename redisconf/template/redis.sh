@@ -9,8 +9,12 @@ CRDT_NAMESPACE=test_cluster
 CRDT=crdt.so
 CRDT_DIR=
 GID=$1
+SLEEP=$1
 if [ -z "$GID" ];then
 	GID=1
+fi
+if [ -z "$SLEEP" ];then
+	SLEEP=1
 fi
 
 
@@ -38,12 +42,12 @@ elif [ -f $FULL_DIR/../$CRDT ];then
 	echo crdt support: $CRDT_DIR
 fi
 sed -i '/loadmodule/d' $DIR/*.conf
-if [ -n $CRDT_DIR ];then
+if [ -f "$CRDT_DIR" ];then
     sed -i '$aloadmodule '$CRDT_DIR $DIR/*.conf
 fi
 
 sed -i '/crdt-gid/d' $DIR/*.conf
-if [ -n $CRDT_DIR ];then
+if [ -f "$CRDT_DIR" ];then
 	sed -i '$acrdt-gid '$CRDT_NAMESPACE' '$GID $DIR/*.conf
 fi
 
@@ -59,12 +63,16 @@ PORT=`cat $CONFIG | grep port | awk '{print $2}'`
 
 echo "Using config file:"$CONFIG $PORT
 
+preCount=0
 for pid in `ps -ef | grep 'redis-serve[r]' | grep "$PORT" | awk '{print $2}'`; do
 	echo "killing" $pid
 	kill -9 $pid
+	preCount=$(( $preCount + 1 ))
 done
 
-sleep 1
+if [ $preCount -ge 0 ];then
+	sleep 1
+fi
 
 DATA_DIR=$FULL_DIR"/data"
 sed -i  "s#dir.*#dir $DATA_DIR#"   $DIR/*.conf
@@ -75,6 +83,4 @@ if [ -f $DIR/redis-server ];then
 	echo using $REDIS
 fi
 nohup $REDIS $CONFIG  > $LOG/master.log 2>&1 &
-sleep 2
-
-setProtectedMode 127.0.0.1 $PORT
+sleep $SLEEP
