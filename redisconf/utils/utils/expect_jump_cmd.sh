@@ -24,6 +24,12 @@ proc log {msg} {
 log_file $log_file
 
 spawn ssh $username@$ip
+
+set timeout 1
+expect {
+	"continue" { send "yes\r" }
+}
+set timeout 5
 expect {
 	"assword:" { send "$passwd\r" }
 }
