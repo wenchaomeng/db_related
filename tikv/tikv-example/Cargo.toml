@@ -1,0 +1,11 @@
+[package]
+name = "tikv-example"
+version = "0.1.0"
+authors = ["wenchao.meng <wcmeng@trip.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tikv-client = { git = "https://github.com/tikv/client-rust.git" }
+tokio = "0.2.0-alpha.4"
