@@ -1,7 +1,11 @@
 tmp
 .swp
 *.log.[0-9]*
+*.log
 **/mysql/**/33*
 *.rdb
 .git
 *.bak
+[0-9]*
+*.so
+`*.tar
