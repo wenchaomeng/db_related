@@ -1,8 +1,10 @@
 . ./ips.sh
+
 ptoy=$meta_uat_ptoy
 ptjq=$meta_uat_ptjq
+logfile=grep.log
 
-currentDC=$ptjq
+currentDC=$ptoy
 
 function findCluster(){
 	ips=$1
@@ -22,12 +24,14 @@ function grepLog(){
 
 	ips=$1
 	cmd=$2
+	log=$3
 	for ip in $ips
 	do
-		./utils/expect_jump_cmd.sh  $ip $user $password "$cmd" greplog.log
+    	echo "==========:"$ip
+		./utils/expect_jump_cmd.sh  $ip $user $password "$cmd" $log
 	done
 }
 
 #findCluster "$ptjq" "_601_"
-grepLog "$ptjq" 'egrep "_601_" /opt/logs/100004375/metaserver.log'
-
+grepLog "$ptjq" 'egrep "changeprimarydc/check.*connect timed out" /opt/logs/100004375/metaserver.log' $logfile &
+tail -f $logfile

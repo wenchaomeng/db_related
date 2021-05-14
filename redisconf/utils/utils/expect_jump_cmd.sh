@@ -7,6 +7,10 @@ set cmd  [lindex $argv 3];
 set log_file [lindex $argv 4];
 
 
+# exp_internal 1    #debug
+
+log_user 0
+
 if { $log_file == "" } {
 	set log_file "/tmp/log"
 } 
@@ -21,7 +25,7 @@ proc log {msg} {
 
 #log "--------------------------------$ip----------------------------------------"
 
-log_file $log_file
+log_file  -a $log_file
 
 spawn ssh $username@$ip
 
