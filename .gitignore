@@ -1,6 +1,6 @@
 tmp
 .swp
-*.log
+*.log.[0-9]*
 **/mysql/**/33*
 *.rdb
 .git

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<deployment>
+<cluster sitesperhost="16" kfactor="0"/>
+</deployment>
